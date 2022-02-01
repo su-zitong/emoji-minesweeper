@@ -1,7 +1,7 @@
 <!doctype>
 <html>
   <head>
-    <title>💥</title>
+    <title>💥扫雷</title>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -265,21 +265,34 @@
       }
     </style>
   </head>
+
   <body>
     <div class="wrapper">
+
+      <!-- 设置按钮 -->
       <button type="button" class="settings js-settings" aria-haspopup="true" aria-expanded="false" aria-label="Settings"></button>
+
+      <!-- 设置菜单 -->
       <div class="js-settings-popup settings-popup">
+
+        <!-- 第一行 -->
         <div class="flex">
           <label class="btn flex-cell" aria-label="Use Twitter Emoji"><input type="radio" name="emoji" id="twemoji" checked> Twemoji</label>
           <label class="btn flex-cell" aria-label="Use Native Emoji"><input type="radio" name="emoji" id="emoji"> Native emoji</label>
         </div>
+
+        <!-- 第二行：地图规格 -->
         <div class="flex">
           <input id="cols" class="input flex-cell" type="number" value="10" min="1" max="500" aria-label="Columns">
           <div class="flex-cell divider">&times;</div>
           <input id="rows" class="input flex-cell" type="number" value="10" min="1" max="500" aria-label="Rows"><br>
         </div>
+
+        <!-- 第三行：炸弹数量 -->
         <div class="prepend-input">💣</div>
         <input id="bombs" class="input" type="number" value="10" min="1" max="2500" aria-label="Number of bombs">
+
+        <!-- 第四行：图标样式 -->
         <select id="emojiset" class="input input-select" aria-label="Change emoji set">
           <option value="🐣 💣 🚧 ◻️">🐣 💣 🚧</option>
           <option value="🍰 👾 📌 ◻️">🍰 👾 📌</option>
@@ -287,48 +300,84 @@
           <option value="⭕️ ❌ ❗️ ✖️️">⭕️ ❌ ❗️ ✖️</option>
           <option value="☀ ⚡ ☔ ☁️">☀ ⚡ ☔ ☁️</option>
         </select>
+
+        <!-- 第五行：确认按钮 -->
         <button class="js-popup-new-game btn" type="button">Save and restart game</button>
+
       </div>
+
+      <!-- 重新开始按钮 -->
       <button type="button" class="action-btn js-new-game" aria-label="New game">
         <span class="default-emoji"></span>
         <span id="result" class="result-emoji"></span>
       </button>
+
+      <!-- 游戏地图 -->
       <div id="map" role="grid" aria-label="Mine field">
       </div>
+
+      <!--底部的状态栏-->
       <div class="bar flex">
+
+        <!--炸弹的数量-->
         <div class="stat flex-cell"><div id="bombs-left">0</div><span class="small-text">BOMBS</span></div>
+
+        <!--操作的次数-->
         <div class="stat flex-cell"><div id="moves"></div><span class="small-text">MOVES</span></div>
+
+        <!--时间-->
         <div class="stat flex-cell"><div id="timer"></div><span class="small-text">TIME</span></div>
+
       </div>
+
     </div>
+
+    <!--源码链接-->
     <a href="https://github.com/muan/emoji-minesweeper" class="link-to-github">[Code]</a>
+
+    <!--反馈-->
     <div aria-live="assertive" class="feedback"></div>
 
+
+
+<!-- js部分 -->
+
     <script>
-      if (navigator.serviceWorker) navigator.serviceWorker.register('/emoji-minesweeper/sw.js')
+      if (navigator.serviceWorker) navigator.serviceWorker.register('/emoji-minesweeper/sw.js');
     </script>
+
+
 
     <!-- haiiii https://github.com/twitter/twemoji is awesome -->
     <script src="twemoji.js"></script>
     <script src="game.js"></script>
 
     <script>
+
+//获取设置菜单输入的行数、列数、炸弹数、emoji样式
       var emojiset = document.getElementById('emojiset').value.split(' ')
       var cols = document.getElementById('cols')
       var rows = document.getElementById('rows')
       var bombs = document.getElementById('bombs')
 
+// 创建地图
       game = new Game(cols.value, rows.value, bombs.value, emojiset, document.getElementById('twemoji').checked)
 
+// queryselector()方法返回文档中匹配的css选择器的第一个元素，例如返回第一个<p>元素
+//顶部重新开始按钮
       document.querySelector('.js-new-game').addEventListener('click', restart)
+
+//保存设置按钮
       document.querySelector('.js-popup-new-game').addEventListener('click', restart)
 
-      document.querySelector('.js-settings').addEventListener('click', function() {
+//设置按钮
+      document.querySelector('.js-settings').addEventListner('click', function() {
         var list = document.querySelector('.js-settings-popup').classList
-        list.contains('show') ? list.remove('show') : list.add('show')
+        list.contains('show') ? list.remove('show') : list.add('show');
         this.setAttribute('aria-expanded', list.contains('show'))
       })
 
+// 重新开始
       function restart () {
         clearInterval(game.timer)
         emojiset = document.getElementById('emojiset').value.split(' ')
@@ -337,15 +386,24 @@
         return false
       }
     </script>
+
+
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga')
+      (function(i,s,o,g,r,a,m){
+        i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();
+          a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;
+          a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga')
 
       ga('create', 'UA-21332781-19', 'auto')
       ga('send', 'pageview')
     </script>
+
+
     <link href="http://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet" type="text/css">
+
+
   </body>
 </html>
